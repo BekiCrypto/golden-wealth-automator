@@ -38,15 +38,17 @@ export function HeroSection() {
               variant="gold" 
               size="lg" 
               className="text-lg px-8 py-3 animate-glow-pulse"
+              onClick={() => document.getElementById('dashboard')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Start Trading Now
+              View Live Dashboard
             </Button>
             <Button 
               variant="premium" 
               size="lg" 
               className="text-lg px-8 py-3"
+              onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              View Dashboard
+              Learn More
             </Button>
           </div>
 

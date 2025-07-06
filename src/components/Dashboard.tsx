@@ -1,9 +1,36 @@
 import { TradingCard } from "./TradingCard";
 import { Button } from "@/components/ui/button";
+import { useTradingData } from "@/hooks/useTradingData";
 
 export function Dashboard() {
+  const { account, positions, stats, loading } = useTradingData();
+
+  if (loading) {
+    return (
+      <div className="py-20 px-4 bg-gradient-dark">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="text-foreground">Loading trading data...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Format currency
+  const formatCurrency = (amount: number | null | undefined) => {
+    if (!amount) return "$0.00";
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(amount);
+  };
+
+  // Calculate win rate
+  const winRate = stats?.total_trades 
+    ? ((stats.winning_trades / stats.total_trades) * 100).toFixed(1)
+    : "0.0";
+
   return (
-    <div className="py-20 px-4 bg-gradient-dark">
+    <div id="dashboard" className="py-20 px-4 bg-gradient-dark">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-foreground mb-4 font-poppins">
@@ -18,25 +45,25 @@ export function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <TradingCard
             title="Account Balance"
-            value="$125,847.50"
-            change="+2.45% today"
-            trend="up"
+            value={formatCurrency(account?.balance)}
+            change={account ? `${account.broker_name} • ${account.account_number}` : "No account"}
+            trend="neutral"
           />
           <TradingCard
             title="Active Trades"
-            value="14"
+            value={positions.length.toString()}
             change="XAUUSD positions"
             trend="neutral"
           />
           <TradingCard
             title="Today's Profit"
-            value="$3,127.89"
-            change="+2.49%"
-            trend="up"
+            value={formatCurrency(stats?.daily_profit)}
+            change={stats?.daily_profit && stats.daily_profit > 0 ? "+" + ((stats.daily_profit / (account?.balance || 1)) * 100).toFixed(2) + "%" : "0%"}
+            trend={stats?.daily_profit && stats.daily_profit > 0 ? "up" : "neutral"}
           />
           <TradingCard
             title="Total Volume"
-            value="47.8 lots"
+            value={`${stats?.total_volume || 0} lots`}
             change="High frequency"
             trend="up"
           />
@@ -46,19 +73,19 @@ export function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <TradingCard
             title="Rebate Earned"
-            value="$892.45"
+            value={formatCurrency(stats?.rebate_earned)}
             change="This month"
             trend="up"
           />
           <TradingCard
             title="Win Rate"
-            value="87.3%"
-            change="Last 30 days"
-            trend="up"
+            value={`${winRate}%`}
+            change={`${stats?.winning_trades || 0} wins of ${stats?.total_trades || 0} trades`}
+            trend={parseFloat(winRate) > 70 ? "up" : "neutral"}
           />
           <TradingCard
             title="Max Drawdown"
-            value="3.2%"
+            value={`${stats?.max_drawdown || 0}%`}
             change="Well within limits"
             trend="neutral"
           />

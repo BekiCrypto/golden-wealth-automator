@@ -9,7 +9,182 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trading_accounts: {
+        Row: {
+          account_number: string
+          balance: number
+          broker_name: string
+          created_at: string
+          equity: number
+          free_margin: number
+          id: string
+          is_active: boolean
+          margin: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_number: string
+          balance?: number
+          broker_name: string
+          created_at?: string
+          equity?: number
+          free_margin?: number
+          id?: string
+          is_active?: boolean
+          margin?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_number?: string
+          balance?: number
+          broker_name?: string
+          created_at?: string
+          equity?: number
+          free_margin?: number
+          id?: string
+          is_active?: boolean
+          margin?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trading_positions: {
+        Row: {
+          closed_at: string | null
+          created_at: string
+          current_price: number | null
+          id: string
+          is_open: boolean
+          lot_size: number
+          open_price: number
+          opened_at: string
+          position_type: string
+          profit_loss: number | null
+          stop_loss: number | null
+          symbol: string
+          take_profit: number | null
+          trading_account_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          closed_at?: string | null
+          created_at?: string
+          current_price?: number | null
+          id?: string
+          is_open?: boolean
+          lot_size: number
+          open_price: number
+          opened_at?: string
+          position_type: string
+          profit_loss?: number | null
+          stop_loss?: number | null
+          symbol?: string
+          take_profit?: number | null
+          trading_account_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          closed_at?: string | null
+          created_at?: string
+          current_price?: number | null
+          id?: string
+          is_open?: boolean
+          lot_size?: number
+          open_price?: number
+          opened_at?: string
+          position_type?: string
+          profit_loss?: number | null
+          stop_loss?: number | null
+          symbol?: string
+          take_profit?: number | null
+          trading_account_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trading_positions_trading_account_id_fkey"
+            columns: ["trading_account_id"]
+            isOneToOne: false
+            referencedRelation: "trading_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trading_stats: {
+        Row: {
+          created_at: string
+          daily_profit: number
+          date: string
+          id: string
+          losing_trades: number
+          max_drawdown: number
+          rebate_earned: number
+          total_trades: number
+          total_volume: number
+          updated_at: string
+          user_id: string
+          winning_trades: number
+        }
+        Insert: {
+          created_at?: string
+          daily_profit?: number
+          date?: string
+          id?: string
+          losing_trades?: number
+          max_drawdown?: number
+          rebate_earned?: number
+          total_trades?: number
+          total_volume?: number
+          updated_at?: string
+          user_id: string
+          winning_trades?: number
+        }
+        Update: {
+          created_at?: string
+          daily_profit?: number
+          date?: string
+          id?: string
+          losing_trades?: number
+          max_drawdown?: number
+          rebate_earned?: number
+          total_trades?: number
+          total_volume?: number
+          updated_at?: string
+          user_id?: string
+          winning_trades?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
